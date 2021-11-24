@@ -24,12 +24,13 @@ class AuthController extends Controller
 protected function jwt(User $user)
     {
         $payload = [
+            'sub' => $user->email,
             'iss' => "lumen-jwt",
-            'sub' => $user->id,
+            'aud' => 'http://localhost:8080',
             'iat' => time(),
-            'exp' => time() + 60 * 60
+            'exp' => time() + 60 * 60,
         ];
-        return JWT::encode($payload, env('JWT_SECRET'));
+        return JWT::encode($payload, env('JWT_KEY', 'secret'), 'HS256');
     }
 
     public function register(Request $request)

@@ -28,7 +28,7 @@ class UserController extends Controller
                 'data' => ([
                     'users' => $user
                 ])
-            ], 201);
+            ], 200);
         } else {
             return response()->json([
                 'success' => false,

@@ -21,6 +21,7 @@ class AuthTest extends TestCase
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => $this->faker->password(),
+            'role' => $this->faker->randomElement(['admin', 'user']),
         ];
 
         // Register new user
@@ -81,12 +82,14 @@ class AuthTest extends TestCase
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => $this->faker->password(),
+            'role' => $this->faker->randomElement(['admin', 'user']),
         ];
 
         $user2 = [
             'name' => $this->faker->name(),
             'email' => $user['email'],
             'password' => $this->faker->password(),
+            'role' => $this->faker->randomElement(['admin', 'user']),
         ];
 
         // Register new user
@@ -127,6 +130,7 @@ class AuthTest extends TestCase
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => $this->faker->password(),
+            'role' => $this->faker->randomElement(['admin', 'user']),
         ];
 
         $credential = [
@@ -172,6 +176,7 @@ class AuthTest extends TestCase
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => $this->faker->password(),
+            'role' => $this->faker->randomElement(['admin', 'user']),
         ];
 
         $credential = [
@@ -231,6 +236,7 @@ class AuthTest extends TestCase
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => $this->faker->password(),
+            'role' => $this->faker->randomElement(['admin', 'user']),
         ];
 
         $credential = [
