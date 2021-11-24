@@ -32,7 +32,7 @@ class BookController extends Controller
                 'data' => ([
                     'books' => $books
                 ])
-                ], 201);
+                ], 200);
             }else{
                 return response()->json([
                 'success' => false,

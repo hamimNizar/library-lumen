@@ -78,10 +78,6 @@ $router->group(['middleware' => 'auth:admin'], function () use ($router) {
 
             // TODO: Routes this to the right controller
 
-            // TODO: Routes this to the right controller
-
-            // TODO: Routes this to the right controller
-
     });
 });
 

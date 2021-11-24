@@ -18,12 +18,12 @@ class JwtMiddleware
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        $token = $request->header('authorization');
+        $token = $request->bearerToken() ?? $request->header('Authorization');
 
         if (!$token) {
             return response()->json([
                 'success' => false,
-                'error' => 'Token required'
+                'message' => 'Token required'
             ], 401);
         }
 
@@ -34,20 +34,21 @@ class JwtMiddleware
         } catch (ExpiredException $e) {
             return response()->json([
                 'success' => false,
-                'error' => 'Provided token is expired'
+                'message' => 'Provided token is expired'
             ], 400);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'error' => 'Error while decoding token'
+                'message' => 'Error while decoding token'
             ], 400);
         } catch (SignatureInvalidException $e) {
             return response()->json([
                 'success' => false,
-                'error' => 'Signature verification failed'
+                'message' => 'Signature verification failed'
             ], 400);
         }
-        $user = User::find($credential->sub);
+        // $user = User::find($credential->sub);
+        $user = User::where('email', $credential->sub)->first();
         if($guard == null){
             $request->auth = $user;
             return $next($request);

@@ -43,7 +43,7 @@ class TransactionController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Server Failure',
-                ], 500);
+                ], 501);
             }
         }else{
             // dd($request->auth->id);
