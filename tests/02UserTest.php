@@ -39,7 +39,7 @@ class UserTest extends TestCase
                 'exp' => time() + 60 * 60,
                 'role' => 'admin',
             ],
-            env('JWT_SECRET', 'secret'),
+            env('JWT_KEY', 'secret'),
             'HS256'
         );
     }
@@ -63,7 +63,7 @@ class UserTest extends TestCase
                 'exp' => time() + 60 * 60,
                 'role' => 'user',
             ],
-            env('JWT_SECRET', 'secret'),
+            env('JWT_KEY', 'secret'),
             'HS256'
         );
     }
@@ -79,10 +79,9 @@ class UserTest extends TestCase
         $this->beforeEach();
 
         // get all users
-        $tes = $this->get('/users', [
-            'Authorization' => "{$this->adminData->token}",
+        $this->get('/users', [
+            'Authorization' => "Bearer {$this->adminData->token}",
         ]);
-        // dd($tes);
 
         // assertions
         $this->assertResponseStatus(200);

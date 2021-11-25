@@ -70,7 +70,7 @@ protected function jwt(User $user)
                     'token' => $tokenJwt
                 ])
             ];
-            return response()->json($response, 200);
+            return response()->json($response, 201);
         } catch (QueryException $error) {
             return response()->json([
                 'success' => false,

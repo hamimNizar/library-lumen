@@ -50,35 +50,22 @@ class BookController extends Controller
     public function getBookById($bookId){
         $book = Book::find($bookId);
         if ($book){
-            if(!empty($book)){
-                return response()->json([
+            return response()->json([
                 'success' => true,
                 'message' => 'Get Book by Id',
                 'data' => ([
-                    'books' => $book
+                    'book' => $book
                 ])
-                ], 201);
-            }elseif(empty($book)){
-                return response()->json([
-                'success' => false,
-                'message' => 'there is no book with id = '.$bookId,
-            ], 400);
-            }
+            ], 200);
         }else{
             return response()->json([
                 'success' => false,
-                'message' => 'Server Failure',
-            ], 500);
+                'message' => 'there is no book with id = ' . $bookId,
+            ], 404);
         }
     }
 
     public function postBook(Request $request){
-        $title = $request->input('title');
-        $description = $request->input('description');
-        $author = $request->input('author');
-        $year = $request->input('year');
-        $synopsis = $request->input('synopsis');
-        $stock = $request->input('stock');
         
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -95,6 +82,13 @@ class BookController extends Controller
                 'message' => $validator->errors(),
             ], 400);
         }
+
+        $title = $request->input('title');
+        $description = $request->input('description');
+        $author = $request->input('author');
+        $year = $request->input('year');
+        $synopsis = $request->input('synopsis');
+        $stock = $request->input('stock');
 
         $postBook = Book::create([
             'title' => $title,
@@ -146,7 +140,7 @@ class BookController extends Controller
                 'success' => true,
                 'message' => 'Book Data Updated',
                 'data' => ([
-                    'user' => $updateBook
+                    'book' => $updateBook
                 ])
             ];
             return response()->json($response, 200);

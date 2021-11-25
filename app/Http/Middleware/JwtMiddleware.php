@@ -19,7 +19,7 @@ class JwtMiddleware
     public function handle($request, Closure $next, $guard = null)
     {
         $token = $request->bearerToken() ?? $request->header('Authorization');
-
+        // dd($token);
         if (!$token) {
             return response()->json([
                 'success' => false,
@@ -27,10 +27,13 @@ class JwtMiddleware
             ], 401);
         }
 
+        
+
         //TODO: handler jika token tidak sama , signature verification
 
         try {
-            $credential = JWT::decode($token, env('JWT_SECRET'), ['HS256']);
+            $credential = JWT::decode($token, env('JWT_KEY'), ['HS256']);
+            // dd($credential);
         } catch (ExpiredException $e) {
             return response()->json([
                 'success' => false,
@@ -47,19 +50,24 @@ class JwtMiddleware
                 'message' => 'Signature verification failed'
             ], 400);
         }
+        // dd($e);
         // $user = User::find($credential->sub);
         $user = User::where('email', $credential->sub)->first();
-        if($guard == null){
+        // dd($guard);
+        // dd($user);
+
+        
+        if ($guard == null) {
             $request->auth = $user;
             return $next($request);
-        }
-        if($user->role != $guard){
+        }else if($user->role != $guard){
             return response()->json([
                 'success' => false,
-                'error' => 'Unauthorized'
-            ], 400);
+                'message' => 'Unauthorized'
+            ], 403);
         }
         $request->auth = $user;
+        // dd($user);
         return $next($request);
     }
 }
