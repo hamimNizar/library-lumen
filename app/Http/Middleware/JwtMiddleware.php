@@ -27,10 +27,6 @@ class JwtMiddleware
             ], 401);
         }
 
-        
-
-        //TODO: handler jika token tidak sama , signature verification
-
         try {
             $credential = JWT::decode($token, env('JWT_KEY'), ['HS256']);
             // dd($credential);
