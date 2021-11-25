@@ -47,7 +47,7 @@ class TransactionController extends Controller
             }
         }else{
             // dd($request->auth->id);
-            $transactions = Transaction::where('user_id', $request->auth->id)->first();
+            $transactions = Transaction::where('user_id', $request->auth->id)->all();
             // dd($transactions);
             if ($transactions){
                 if(count($transactions->all()) != 0){

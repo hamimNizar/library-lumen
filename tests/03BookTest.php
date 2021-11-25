@@ -209,7 +209,7 @@ class BookTest extends TestCase
             $newBook,
             [
                 'Authorization' => "Bearer {$this->adminData->token}",
-            ]
+            ],
         );
 
         // assertions
@@ -218,8 +218,8 @@ class BookTest extends TestCase
             'success',
             'message',
         ]);
-        $this->response->assertJsonPath('success', true);
-        $this->seeInDatabase('books', $newBook);
+        $this->response->assertJsonPath('success', false);
+        $this->notSeeInDatabase('books', $newBook);
     }
 
     public function testShouldReturn401UnAuthorizedInsertABookWithoutToken()
