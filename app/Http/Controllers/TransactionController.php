@@ -22,7 +22,6 @@ class TransactionController extends Controller
         //
     }
 
-    // TODO: Create transaction logic
     public function index(Request $request){
         // dd($request);
         if ($request->auth->role == 'admin') {
@@ -59,6 +58,7 @@ class TransactionController extends Controller
                     return response()->json([
                         'success' => true,
                         'message' => 'List all transactions from admin',
+
                         'data' => [
                             'transactions' => $tes,
                         ]

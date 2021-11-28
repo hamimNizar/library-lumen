@@ -356,6 +356,34 @@ class BookTest extends TestCase
         $this->response->assertJsonPath('success', true);
     }
 
+    //TODO : Add Testing Book while one of parameters required is empty
+    public function testShouldReturn400EmptyFieldsUpdateABookByAdmin()
+    {
+        $this->beforeEach();
+
+        $newTitle = $this->faker->title();
+        $newDescription = $this->faker->realText(500);
+        $newSynopsis = $this->faker->realText(500);
+
+        $this->put(
+            "/books/{$this->booksData[0]->id}",
+            [
+                'title' => $newTitle,
+            ],
+            [
+                'Authorization' => "Bearer {$this->adminData->token}",
+            ]
+        );
+
+        // assertions
+        $this->assertResponseStatus(400);
+        $this->response->assertJsonStructure([
+            'success',
+            'message',
+        ]);
+        $this->response->assertJsonPath('success', false);
+    }
+
     public function testShouldReturn401UnAuthorizedUpdateABookWithoutToken()
     {
         $this->beforeEach();

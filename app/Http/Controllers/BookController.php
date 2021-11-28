@@ -19,27 +19,27 @@ class BookController extends Controller
     {
         //
     }
-
-    // TODO: Create book logic
-    public function index(){
+    
+    public function index()
+    {
         $books = Book::all();
         // var_dump(count($books));die;
-        if ($books){
-            if(count($books) != 0){
+        if ($books) {
+            if (count($books) != 0) {
                 return response()->json([
-                'success' => true,
-                'message' => 'List all Books',
-                'data' => ([
-                    'books' => $books
-                ])
+                    'success' => true,
+                    'message' => 'List all Books',
+                    'data' => ([
+                        'books' => $books
+                    ])
                 ], 200);
-            }else{
+            } else {
                 return response()->json([
-                'success' => false,
-                'message' => 'No books',
-            ], 400);
+                    'success' => false,
+                    'message' => 'No books',
+                ], 400);
             }
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Server Failure',
@@ -47,9 +47,10 @@ class BookController extends Controller
         }
     }
 
-    public function getBookById($bookId){
+    public function getBookById(Request $request, $bookId)
+    {
         $book = Book::find($bookId);
-        if ($book){
+        if ($book) {
             return response()->json([
                 'success' => true,
                 'message' => 'Get Book by Id',
@@ -57,7 +58,7 @@ class BookController extends Controller
                     'book' => $book
                 ])
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'there is no book with id = ' . $bookId,
@@ -65,8 +66,9 @@ class BookController extends Controller
         }
     }
 
-    public function postBook(Request $request){
-        
+    public function postBook(Request $request)
+    {
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
@@ -115,59 +117,85 @@ class BookController extends Controller
         }
     }
 
-    public function updateBook(Request $request, $bookId){
-        $updateBook = Book::findOrFail($bookId);
+    public function updateBook(Request $request, $bookId)
+    {
+        // dd($request->auth);
+        if ($request->auth->role == 'admin') {
+            $updateBook = Book::find($bookId);
 
-        // $validator = Validator::make($request->all(), [
-        //     'title' => 'required',
-        //     'description' => 'required',
-        //     'author' => 'required',
-        //     'year' => 'required',
-        //     'synopsis' => 'required',
-        //     'stock' => 'required',
-        // ]);
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'description' => 'required',
+                'synopsis' => 'required',
+            ]);
 
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => $validator->errors(),
-        //     ], 400);
-        // }
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors(),
+                ], 400);
+            }
 
-        try {
-            $updateBook->update($request->all());
-            $response = [
-                'success' => true,
-                'message' => 'Book Data Updated',
-                'data' => ([
-                    'book' => $updateBook
-                ])
-            ];
-            return response()->json($response, 200);
-        } catch (QueryException $error) {
+            if ($updateBook) {
+                try {
+                    $updateBook->update($request->all());
+                    $response = [
+                        'success' => true,
+                        'message' => 'Book Data Updated',
+                        'data' => ([
+                            'book' => $updateBook
+                        ])
+                    ];
+                    return response()->json($response, 200);
+                } catch (QueryException $error) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Gagal" . $error->errorInfo,
+                    ], 400);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request Failed',
+                ], 404);
+            }
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => "Gagal" . $error->errorInfo,
-            ], 400);
+                'message' => 'Forbidden Access, You are not authorized',
+            ], 404);
         }
-        
     }
 
-    public function deleteBook($bookId){
-        $deleteBook = Book::find($bookId);
-
-        try {
-            $deleteBook->delete();
-            $response = [
-                'success' => true,
-                'message' => 'Book Data Deleted',
-            ];
-            return response()->json($response, 200);
-        } catch (QueryException $error) {
+    public function deleteBook(Request $request, $bookId)
+    {
+        if ($request->auth->role == 'admin') {
+            $deleteBook = Book::find($bookId);
+            if ($deleteBook) {
+                try {
+                    $deleteBook->delete();
+                    $response = [
+                        'success' => true,
+                        'message' => 'Book Data Deleted',
+                    ];
+                    return response()->json($response, 200);
+                } catch (QueryException $error) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Gagal" . $error->errorInfo,
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request Failed',
+                ], 404);
+            }
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => "Gagal" . $error->errorInfo,
-            ]);
+                'message' => 'Forbidden Access, You are not authorized',
+            ], 404);
         }
     }
 }
