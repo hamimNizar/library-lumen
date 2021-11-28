@@ -52,7 +52,7 @@ class JwtMiddleware
         // dd($guard);
         // dd($user);
 
-        
+
         if ($guard == null) {
             $request->auth = $user;
             return $next($request);

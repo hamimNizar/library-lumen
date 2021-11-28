@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -27,4 +28,11 @@ class Book extends Model
     protected $hidden = [
         'created_at', 'updated_at', 'deleted_at'
     ];
+
+    /**
+     * Get the transactions for the blog post.
+     */
+    public function transactions(){
+    	return $this->hasMany(Transaction::class);
+    }
 }

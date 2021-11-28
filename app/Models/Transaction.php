@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Book;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      *
@@ -24,5 +25,16 @@ class Transaction extends Model
     protected $hidden = [
         'created_at', 'updated_at'
     ];
-    
+
+    /**
+     * Get the comments for the blog post.
+     */
+    public function book(){
+    	return $this->belongsTo(Book::class);
+    }
+
+    public function user(){
+    	return $this->belongsTo(User::class);
+    }
+
 }
