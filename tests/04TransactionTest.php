@@ -391,6 +391,7 @@ class TransactionTest extends TestCase
             'book_id' => $this->booksData[0]->id,
             'deadline' => date('Y-m-d H:i:s', time() + 7 * 24 * 60 * 60),
         ]);
+
         $transaction->save();
 
         $this->get("/transactions/{$transaction->id}", [

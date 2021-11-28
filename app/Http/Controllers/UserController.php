@@ -29,6 +29,7 @@ class UserController extends Controller
             ], 403);
         }
         $user = User::all();
+        // dd($user);
         if ($user) {
             return response()->json([
                 'success' => true,
@@ -46,7 +47,7 @@ class UserController extends Controller
     }
 
     public function show(Request $request, $userId)
-    {   
+    {
         if ($request->auth->role == 'admin') {
             // try{
             //     $user = User::findOrFail($userId);
@@ -64,7 +65,7 @@ class UserController extends Controller
             //     ], 404);
             // }
             $user = User::find($userId);
-            
+
             if ($user) {
                 return response()->json([
                     'success' => true,
@@ -102,7 +103,7 @@ class UserController extends Controller
                 ], 403);
             }
         }
-        
+
     }
 
     public function update(Request $request, $userId)
@@ -154,7 +155,7 @@ class UserController extends Controller
                 'message' => 'Request Failed',
             ], 403);
         }
-        
+
         $user = User::findOrFail($userId);
 
         try {
